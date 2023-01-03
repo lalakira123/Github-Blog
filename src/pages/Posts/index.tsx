@@ -1,5 +1,11 @@
+import { Profile } from "./components/Profile";
+import { PostsContainer } from "./styles";
+
+
 export function Posts() {
 	return (
-		<h1>Posts</h1>
+		<PostsContainer>
+			<Profile />
+		</PostsContainer>
 	)
 }
