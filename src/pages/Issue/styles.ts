@@ -7,7 +7,7 @@ export const IssueContainer = styled.main`
 	margin-top: -5.5rem;
 `
 
-export const TitleIssueContainer = styled.div`
+export const TitleIssueContainer = styled.section`
 	width: 100%;
 	padding: 2rem;
 	background-color: ${(props) => props.theme["base-profile"]};
@@ -58,4 +58,8 @@ export const IconContent = styled.div`
 	span {
 		color: ${(props) => props.theme["base-span"]};
 	}
+`
+
+export const IssueContent = styled.section`
+	padding: 2rem;
 `
