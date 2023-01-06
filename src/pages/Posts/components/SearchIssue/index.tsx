@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { SearchIssueContainer, SearchIssueHeader, SearchIssueInput } from "./styles";
 
 interface SearchIssueProps {
@@ -13,11 +13,11 @@ export function SearchIssue({number_publish, getListPost}: SearchIssueProps) {
 		getListPost(query)
 	}, [query])
 
-	function handleChangeQuery(event: ChangeEvent<HTMLInputElement>) {
+	const handleChangeQuery = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault()
 
 		setQuery(event.target.value)
-	}
+	}, [])
 
 	return (
 		<SearchIssueContainer>

@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/axios";
 import { bodyFormatter, queryFormatter } from "../../utils/formatter";
@@ -20,13 +20,13 @@ export function Posts() {
 
 	const navigate = useNavigate()
 	
-	async function getListPost(query?:string) {
+	const getListPost = useCallback( async (query?:string) => {
 		const response = await api.get(
 			`/search/issues?q=${queryFormatter(query)}repo:rocketseat-education/reactjs-github-blog-challenge`
 		)
 
 		setPosts(response.data.items)
-	}
+	}, [])
 
 	useEffect(() => {
 		getListPost()
