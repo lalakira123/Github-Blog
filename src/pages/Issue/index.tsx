@@ -2,49 +2,87 @@ import { IconContent, IconsContainer, IssueContainer, IssueContent, NavIssueCont
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faAngleLeft, faArrowUpRightFromSquare, faCalendarDay, faComment } from "@fortawesome/free-solid-svg-icons";
+import { NavLink, useParams } from "react-router-dom";
+import { api } from "../../lib/axios";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import rehypeHighlight from 'rehype-highlight';
+
+interface User {
+  login: string
+}
+
+interface Post {
+  title: string
+  html_url: string
+  body: string
+  comments: number
+  created_at: string
+  user: User
+}
 
 export function Issue() {
+  const [post, setPost] = useState<Post>({
+    title: '', 
+    html_url: '', 
+    body: '', 
+    comments: 0, 
+    created_at: '01/01/2001', 
+    user: {login: ''}
+  })
+
+  const { id } = useParams()
+
+  useEffect(() => {
+    getPost()
+  }, [])
+
+  async function getPost() {
+    const response = await api.get(`/repos/rocketseat-education/reactjs-github-blog-challenge/issues/${id}`)
+
+    setPost(response.data)
+  }
+
 	return (
 		<IssueContainer>
 			<TitleIssueContainer>
 				<NavIssueContainer>
-					<a href="#">
+					<NavLink to="/">
 						<FontAwesomeIcon icon={faAngleLeft} color="#3294f8" />
 						<span>VOLTAR</span>
-					</a>
-					<a href="#">
+					</NavLink>
+					<a href={post.html_url}>
 						<span>VER NO GITHUB</span>
 						<FontAwesomeIcon icon={faArrowUpRightFromSquare} color="#3294f8" />
 					</a>
 				</NavIssueContainer>
 
-				<h3>JavaScript data types and data structures</h3>
+				<h3>{post.title}</h3>
 
 				<IconsContainer>
 					<IconContent>
 						<FontAwesomeIcon icon={faGithub} color="#3A536B" />
-						<span>lalakira123</span>
+						<span>{post.user.login}</span>
 					</IconContent>
 					<IconContent>
 						<FontAwesomeIcon icon={faCalendarDay} color="#3A536B" />
-						<span>Há 1 dia</span>
+						<span>{formatDistanceToNow(new Date(post.created_at), {locale: ptBR, addSuffix: true})}</span>
 					</IconContent>
 					<IconContent>
 						<FontAwesomeIcon icon={faComment} color="#3A536B" />
-						<span>5 comentários</span>
+						<span>{post.comments} comentários</span>
 					</IconContent>
 				</IconsContainer>
 			</TitleIssueContainer>
 
 			<IssueContent>
-				<p>Programming languages all have built-in data structures, but these often 
-					differ from one language to another. This article attempts to list the built-in data 
-					structures available in JavaScript and what properties they have. These can be used to 
-					build other data structures. Wherever possible, comparisons with other languages are drawn.
-					Dynamic typing JavaScript is a loosely typed and dynamic language. Variables in JavaScript 
-					are not directly associated with any particular value type, and any variable can be assigned 
-					(and re-assigned) values of all types:
-				</p>
+        <p>
+          <ReactMarkdown rehypePlugins={[rehypeHighlight]} className="react-markdown">
+            {post.body}
+          </ReactMarkdown>
+        </p> 
 			</IssueContent>
 		</IssueContainer>
 	)

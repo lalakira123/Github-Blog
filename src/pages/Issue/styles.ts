@@ -62,4 +62,12 @@ export const IconContent = styled.div`
 
 export const IssueContent = styled.section`
 	padding: 2rem;
+
+	.react-markdown {
+		white-space: pre-wrap;
+
+		img {
+			max-width: 100%;
+		}
+	}
 `

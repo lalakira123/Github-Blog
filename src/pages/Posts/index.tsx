@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/axios";
 import { bodyFormatter, queryFormatter } from "../../utils/formatter";
 import { Profile } from "./components/Profile";
@@ -16,6 +17,8 @@ interface Post {
 
 export function Posts() {
 	const [posts, setPosts] = useState<Post[]>([])
+
+	const navigate = useNavigate()
 	
 	async function getListPost(query?:string) {
 		const response = await api.get(
@@ -41,15 +44,15 @@ export function Posts() {
 			<IssuesContainer>
 				{posts.map((post) => {
 					return (
-						<IssueCard key={post.number}>
-							<IssueHeader>
-								<h3>{post.title}</h3>
-								<span>{formatDistanceToNow(new Date(post.created_at), {locale: ptBR, addSuffix: true})}</span>
-							</IssueHeader>
-							<p>
-								{bodyFormatter(post.body)}
-							</p>
-						</IssueCard>
+							<IssueCard key={post.number} onClick={() => navigate(`/issue/${post.number}`)}>
+								<IssueHeader>
+									<h3>{post.title}</h3>
+									<span>{formatDistanceToNow(new Date(post.created_at), {locale: ptBR, addSuffix: true})}</span>
+								</IssueHeader>
+								<p>
+									{bodyFormatter(post.body)}
+								</p>
+							</IssueCard>
 					)
 				})}
 			</IssuesContainer>
