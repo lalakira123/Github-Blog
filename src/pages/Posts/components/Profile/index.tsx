@@ -2,35 +2,77 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconContent, IconsContainer, ProfileContainer, ProfileInfoContainer, TitleContainer } from "./styles";
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBuilding, faUserGroup, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { api } from '../../../../lib/axios';
+import { useEffect, useState } from 'react';
+
+interface ProfileProps {
+	name: string
+	html_url: string
+	company: string
+	login: string
+	bio: string
+	followers: string
+	avatar_url: string
+}
 
 export function Profile() {
-    return (
-        <ProfileContainer>
-				<img src="https://avatars.githubusercontent.com/u/83435979?v=4" alt=""/>
+	const [profile, setProfile] = useState<ProfileProps>({
+		name: '', 
+		html_url: '', 
+		company: '', 
+		login: '', 
+		bio: '', 
+		followers: '',
+		avatar_url: ''
+	})
 
-				<ProfileInfoContainer>
-					<TitleContainer>
-						<h2>Laerte Akira</h2>
-						<a href="/#">
-							GITHUB 
-							<FontAwesomeIcon icon={faArrowUpRightFromSquare} color="#3294f8" />
-						</a>
-					</TitleContainer>
+	async function getProfile() {
+		const response = await api.get('/users/lalakira123')
 
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel mollitia quasi quo expedita quos blanditiis laboriosam laborum voluptates voluptatibus maiores! Error iusto laborum eveniet id qui in consequuntur voluptates explicabo?</p>
+		const {
+			name, 
+			html_url,
+			company,
+			login,
+			bio,
+			followers,
+			avatar_url,
+		} = response.data
+
+		setProfile({name, html_url, company, login, bio, followers, avatar_url})
+	}
+
+	useEffect(() => {
+		getProfile()
+	}, [])
+
+  return (
+    <ProfileContainer>
+			<img src={profile.avatar_url} alt=""/>
+
+			<ProfileInfoContainer>
+				<TitleContainer>
+					<h2>{profile.name}</h2>
+					<a href={profile.html_url}>
+						GITHUB 
+						<FontAwesomeIcon icon={faArrowUpRightFromSquare} color="#3294f8" />
+					</a>
+				</TitleContainer>
+
+					<p>{profile.bio}</p>
 					
 					<IconsContainer>
 						<IconContent>
 							<FontAwesomeIcon icon={faGithub} color="#3A536B" />
-							<span>lalakira123</span>
+							<span>{profile.login}</span>
 						</IconContent>
 						<IconContent>
 							<FontAwesomeIcon icon={faBuilding} color="#3A536B" />
-							<span>Vayon Insurance Solutions</span>
+							<span>{profile.company}</span>
 						</IconContent>
 						<IconContent>
 							<FontAwesomeIcon icon={faUserGroup} color="#3A536B" />
-							<span>32 seguidores</span>
+							<span>{profile.followers} seguidores</span>
 						</IconContent>
 					</IconsContainer>
 				</ProfileInfoContainer>

@@ -31,6 +31,7 @@ export const IssueCard = styled.div`
 
 export const IssueHeader = styled.header`
 	display: flex;
+	justify-content: space-between;
 	gap: 1rem;
 
 	h3 {

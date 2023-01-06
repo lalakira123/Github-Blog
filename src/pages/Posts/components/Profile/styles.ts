@@ -19,10 +19,12 @@ export const ProfileContainer = styled.section`
 export const ProfileInfoContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	gap: 0.5rem;
 
 	p {
 		line-height: 25.6px;
+		margin-bottom: 3rem;
 	}
 `
 

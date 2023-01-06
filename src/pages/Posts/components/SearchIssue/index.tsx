@@ -1,14 +1,36 @@
+import { ChangeEvent, useEffect, useState } from "react";
 import { SearchIssueContainer, SearchIssueHeader, SearchIssueInput } from "./styles";
 
-export function SearchIssue() {
+interface SearchIssueProps {
+	number_publish: number
+	getListPost: (query?: string) => void
+}
+
+export function SearchIssue({number_publish, getListPost}: SearchIssueProps) {
+	const [query, setQuery] = useState('')
+
+	useEffect(() => {
+		getListPost(query)
+	}, [query])
+
+	function handleChangeQuery(event: ChangeEvent<HTMLInputElement>) {
+		event.preventDefault()
+
+		setQuery(event.target.value)
+	}
+
 	return (
 		<SearchIssueContainer>
 			<SearchIssueHeader>
 				<h3>Publicações</h3>
-				<span>6 publicações</span>
+				<span>{number_publish} publicações</span>
 			</SearchIssueHeader>
 			<form>
-				<SearchIssueInput placeholder="Buscar conteúdo"/>
+				<SearchIssueInput 
+					placeholder="Buscar conteúdo"
+					value={query}
+					onChange={handleChangeQuery}
+				/>
 			</form>
 		</SearchIssueContainer>
 	)
